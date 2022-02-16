@@ -1,0 +1,13 @@
+#!/bin/sh
+
+imgName=$(date +"%Y-%m-%d-%T")-"screenshot"
+output="$HOME/Pictures/screenshots/$imgName.png"
+
+case "$1" in
+  "select") scrot "$output" --select --line mode=edge || exit ;;
+  "window") scrot "$output" --focused --border || exit ;;
+  *) scrot "$output" || exit ;;
+esac
+
+dunstify -u low -i $output "Screenshot taken: " $imgName -t 5000
+
