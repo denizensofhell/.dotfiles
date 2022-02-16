@@ -1,0 +1,85 @@
+# Use sh to execute sxhkd commands (fish is slow af ig)
+set -U SXHKD_SHELL sh
+
+# Launcher (rofi)
+super + @space
+  rofi -show drun
+
+# ------------
+# APPLICATIONS
+# ------------
+
+# Terminal (kitty)
+super + Return
+  kitty
+
+# Screenshot (scrot)
+# full screen
+@Print
+  screenshot
+# select area
+shift + @Print
+  screenshot select
+# current window
+control + @Print
+  screenshot window
+
+# Editor (neovim)
+super + v
+  kitty -e nvim
+
+# File Manager (ranger)
+super + e
+  kitty ranger
+
+# ------
+# SYSTEM
+# ------
+
+# Reload sxhkd config
+super + Escape
+  pkill -USR1 -x sxhkd
+
+# Quit/Restart bspwm
+super + shift + {q,r}
+  bspc {quit,wm -r}
+
+# Lock
+super + shift + l
+ dm-tool lock
+
+# -------
+# DESKTOP
+# -------
+
+# Move window to new desktop
+super + {_,shift + }{1-9,0}
+  bspc desktop -f {prev,next}
+
+# Focus desktop prev/next
+super + {Page_Down, Page_Up}
+  bspc desktop -f {prev,next}
+
+# --
+# WM
+# --
+
+# Float/Tile window
+super + Tab
+  bspc node -t {floating,tiled}
+
+# Close one/all window(s)
+super + {_,shift} q
+ bspc node -{c,k}
+
+# Focus to last window
+alt + Tab
+  bspc node -f last.local.!hidden.window
+
+# Move floating window (stuck with arrows rn)
+super + {Left,Up,Down,Right}
+  bspc node -v {-20 0,0 -20,0 20,20 0}
+
+# resize a window
+super + ctrl + {Up,Down,Left,Right}
+  {bspc node -z top 10 10; bspc node -z bottom -10 -10, bspc node -z bottom 10 10; bspc node -z top -10 -10, bspc node -z left 10 10; bspc node -z right -10 -10, bspc node -z right 10 10; bspc node -z left -10 -10 }
