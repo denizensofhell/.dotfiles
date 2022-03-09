@@ -8,14 +8,14 @@ $HOME/.config/polybar/launch.sh
 
 bspc monitor -d I II III IV V VI VII VIII IX X
 
-."$HOME/.cache/wal/colors.sh"
+source ~/.cache/wal/colors.sh
 
 bspc config normal_border_color "$clolr1"
 bspc config active_border_color "$color2"
-bspc config focused_border_color "$color15"
+bspc config focused_border_color "$color4"
 
-bspc config border_width         2
-bspc config window_gap          12
+bspc config border_width         1
+bspc config window_gap          10
 
 bspc config split_ratio          0.52
 bspc config borderless_monocle   true

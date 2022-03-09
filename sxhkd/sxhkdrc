@@ -115,10 +115,10 @@ XF86AudioPrev
 # Key Brighness
 # Increase
 XF86KbdBrightnessUp
-  brightnessctl --device='smc::kbd_backlight' set +10%
+  medianotos 'up'
 # Decrease
 XF86KbdBrightnessDown
-  brightnessctl --device='smc::kbd_backlight' set 10%-
+  medianotos 'down'
 
 # idk1
 # idk2
