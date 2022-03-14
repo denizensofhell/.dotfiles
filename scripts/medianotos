@@ -1,19 +1,28 @@
 #!/bin/bash
 
+# Call the script like:
+# medianotos vol mute655
+# medianotos key up
+# medianotos scr down
+
+function get_key_brightness {
+  echo $(brightnessctl -m -d 'smc::kbd_backlight' | awk -F, '{print substr($4, 0, length($4)-1)}')
+}
+
+function send_notification {
+  keyBrightnessPercentage=$(get_key_brightness)
+  icon="/usr/share/icons/Adwaita/24x24/status/keyboard-brightness-symbolic.symbolic.png"
+  dunstify $keyBrightnessPercentage -u low -i $icon -r 66
+}
+
 if [ $1 == 'up' ]
 then
-  brightnessctl --device='smc::kbd_backlight' set +10%
-  keyBrightnessPercentage=$(brightnessctl -m -d 'smc::kbd_backlight' | awk -F, '{print substr($4, 0, length($4)-1)}')
- dunstify $keyBrightnessPercentage -r 666
+  brightnessctl --device='smc::kbd_backlight' set +15
+  send_notification
 elif [ $1 == 'down' ]
 then
-  brightnessctl --device='smc::kbd_backlight' set 10%-
-  keyBrightnessPercentage=$(brightnessctl -m -d 'smc::kbd_backlight' | awk -F, '{print substr($4, 0, length($4)-1)}')
-  dunstify $keyBrightnessPercentage -r 666
+  brightnessctl --device='smc::kbd_backlight' set 15-
+  send_notification
 else
   dunstify 'else'
 fi
-#brightnessctl --device='smc::kbd_backlight' set +10%
-#keyBrightnessPercentage=$(brightnessctl -m -d 'smc::kbd_backlight' | awk -F, '{print substr($4, 0, length($4)-1)}')
-
-

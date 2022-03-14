@@ -1,0 +1,15 @@
+#!/bin/bash
+
+muted=$(amixer get Master |grep % |awk '{print $6}' |sed -e 's/\[//' -e 's/\]//')
+
+if [ $muted == "off" ]
+then
+  amixer set Master toggle
+fi
+
+if [ $1 == "up" ]
+then
+  amixer set Master 5%+ 1>/dev/null
+else
+  amixer set Master 5%- 1>/dev/null
+fi

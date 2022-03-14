@@ -74,7 +74,14 @@ super + {_,shift} q
 
 # Focus to last window
 alt + Tab
-  bspc node -f last.local.!hidden.window
+  bspc node -f last
+
+# Swap focused window
+alt + {h,j,k,l}
+  bspc node -s {west,south,north,east}
+
+# Change focused window
+
 
 # Move floating window (stuck with arrows rn)
 super + {Left,Up,Down,Right}
@@ -90,11 +97,11 @@ super + ctrl + {Up,Down,Left,Right}
 
 # Increase volume
 XF86AudioRaiseVolume
-  amixer set Master 5%+ 1>/dev/null
+  volume 'up'
 
 # Decrease volume
 XF86AudioLowerVolume
-  amixer set Master 5%- 1>/dev/null
+  volume 'down'
 
 # Mute volume
 XF86AudioMute
