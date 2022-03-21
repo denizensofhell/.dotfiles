@@ -50,14 +50,12 @@ previewImg() {
 }
 runWal() {
   echo "Running pywal..."
-  wal -i $ORIGIMGPATH --backend wal -q
+  wal -i $ORIGIMGPATH --backend wal -n -q
 }
 sendIt() {
   echo "Sending it..."
-  # THE BG IS BEING SET FOR LESS THAN ONE SECOND
-  # AND THEN GETS SET BACK TO THE ORIGIMGPATH IMG
-  # NOT SURE WHY THIS IS AND NOT INTENDE
   feh --bg-fill $HOME/$NEWIMGPATH
+  bspc wm -r
 }
 
 DARKPER=""
