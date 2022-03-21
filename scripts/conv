@@ -1,3 +1,108 @@
-!#/bin/bash
+#!/bin/bash
 
+checkPath() {
+  if [ ! -f $ORIGIMGPATH ]; then
+    echo "File not found: "$ORIGIMGPATH
+    exit 0
+  fi
+}
+createNewPath() {
+  file_type=${ORIGIMGPATH#*.}
+  cut_name=${ORIGIMGPATH%%.*}
+  file_name=${cut_name#*/}
+  file_path=${cut_name%/*}
+  added_name=$file_name-dark
+  TEMPIMGPATH=$HOME/temp/conv/$added_name.$file_type
+  NEWIMGPATH=$file_path/$added_name.$file_type
+  
+  export NEWIMGPATH TEMPIMGPATH
+}
+convertImg() {
+  echo "Converting Image..."
 
+  if [[ $preview = 1 ]]; then
+    path=$TEMPIMGPATH
+  else
+    path=$NEWIMGPATH
+  fi
+
+  if [ ! -d ${path%/*} ]; then
+    mkdir -p $HOME/temp/conv/
+    echo "  temp path created: $HOME/temp/conv/"
+  fi
+
+  if [ -z ${COLOR} ]; then
+    COLOR=($(jq -r '.["special"]["background"]' $HOME/.cache/wal/colors.json))
+  fi
+
+  if [ ! -f  $path ]; then
+    convert $ORIGIMGPATH -fill $COLOR -colorize $DARKPER $path
+  else
+    echo "o/"
+    # rm $path
+    # convert $ORIGIMGPATH -fill $COLOR -colorize $DARKPER $path
+  fi
+}
+previewImg() {
+  echo "Opening preview.."
+  feh $TEMPIMGPATH --scale-down -auto-zoom --quiet
+  echo "Like it or nah... [y/n]"
+}
+runWal() {
+  echo "Running pywal..."
+  wal -i $ORIGIMGPATH --backend wal -q
+}
+sendIt() {
+  echo "Sending it..."
+  # THE BG IS BEING SET FOR LESS THAN ONE SECOND
+  # AND THEN GETS SET BACK TO THE ORIGIMGPATH IMG
+  # NOT SURE WHY THIS IS AND NOT INTENDE
+  feh --bg-fill $HOME/$NEWIMGPATH
+}
+
+DARKPER=""
+COLOR=""
+ORIGIMGPATH=""
+NEWIMGPATH=""
+TEMPIMGPATH=""
+while getopts "i:b:c:d:pws" opt; do
+  case $opt in
+    i)
+      ORIGIMGPATH=$OPTARG
+      export ORIGIMGPTH
+    ;;
+    c)
+      COLOR=$OPTARG
+      export COLOR
+    ;;
+    d)
+      DARKPER=$OPTARG
+      export DARKPER
+    ;;
+    p)
+      preview=1
+    ;;
+    w)
+      run_wal=1
+    ;;
+    s)
+      send_it=1
+    ;;
+  esac
+done
+
+checkPath
+createNewPath
+convertImg
+
+if [[ $send_it = 1 ]]; then
+  runWal
+  sendIt
+  run_wal=0
+fi
+if [[ $preview = 1 ]]; then
+  previewImg
+fi
+if [[ $run_wal = 1 ]]; then
+  runWal
+fi
