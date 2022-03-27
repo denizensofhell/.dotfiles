@@ -1,0 +1,3 @@
+#!/bin/bash
+
+wal -i Downloads/bg2.jpg --backend wal -q

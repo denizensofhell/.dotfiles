@@ -38,9 +38,15 @@ convertImg() {
   if [ ! -f  $path ]; then
     convert $ORIGIMGPATH -fill $COLOR -colorize $DARKPER $path
   else
-    echo "o/"
-    # rm $path
-    # convert $ORIGIMGPATH -fill $COLOR -colorize $DARKPER $path
+    if [ $send_it = 1 ]; then
+      rm $path
+      convert $ORIGIMGPATH -fill $COLOR -colorize $DARKPER $path 
+    else
+      echo "File already exists: "$path
+      echo "Overwrite file [y/n]"
+      # rm $path
+      # convert $ORIGIMGPATH -fill $COLOR -colorize $DARKPER $path
+    fi
   fi
 }
 previewImg() {
